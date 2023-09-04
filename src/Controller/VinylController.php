@@ -3,26 +3,40 @@
 namespace App\Controller;
 
 use function Symfony\Component\String\u;
-use Doctrine\ORM\Query\AST\Functions\UpperFunction;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class VinylController
+class VinylController extends AbstractController
 {
     #[Route('/')]
     public function homepage(): Response
     {
-        return new Response('Title: PB and Jams');
+        $tracks = [
+            ['song' => 'Gansta\'s Paradise', 'artist' => 'Coolio'],
+            ['song' =>'Waterfalls','artist' => 'TLC'],
+            ['song' =>'Creep','artist' => 'Radiohead'],
+            ['song' =>'Kiss From a Rose','artist' => 'Seal'],
+            ['song' =>'On Bended Knee','artist' => 'Boyz II Men'],
+            ['song' =>'Fantasy','artist' => 'Mariah Carey'],
+        ];
+
+        return $this->render('vinyl/homepage.html.twig', [
+            'title' => 'PB & jams',
+            'tracks' => $tracks,
+        ]);
     }
 
+
     #[Route('/browse/{slug}')]
-    public function browse(string $slug = null): Response 
+    public function browse(string $slug = null): Response
     {
-        if($slug){
-        $title = 'Genre: '.u(str_replace('-',' ',$slug))->title(true);
-    } else {
-        $title ='all Genres';
-    }
-        return new Response('Genre: ' .$title);
+        if ($slug) {
+            $title = 'Genre: ' . u(str_replace('-', ' ', $slug))->title(true);
+        } else {
+            $title = 'all Genres';
+        }
+        return new Response($title);
     }
 }
